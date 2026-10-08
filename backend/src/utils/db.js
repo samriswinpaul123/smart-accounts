@@ -9,26 +9,25 @@ export async function connectDB() {
   let mongoUri = process.env.MONGODB_URI;
 
   if (!mongoUri) {
-    console.log('No MONGODB_URI found in environment. Starting MongoMemoryReplSet...');
+    console.log('No MONGODB_URI found in environment. Initializing fallback memory database...');
     try {
       replSet = await MongoMemoryReplSet.create({
-        binary: { version: '5.0.22' },
         replSet: { storageEngine: 'wiredTiger' }
       });
       mongoUri = replSet.getUri();
-      console.log(`MongoMemoryReplSet successfully started at: ${mongoUri}`);
+      console.log(`MongoMemoryReplSet started at: ${mongoUri}`);
     } catch (err) {
-      console.error('Failed to start MongoMemoryReplSet:', err);
-      throw err;
+      console.warn('MongoMemoryReplSet start error:', err.message);
     }
   }
 
-  try {
-    await mongoose.connect(mongoUri);
-    console.log('MongoDB connected successfully.');
-  } catch (err) {
-    console.error('Mongoose connection failure:', err);
-    throw err;
+  if (mongoUri) {
+    try {
+      await mongoose.connect(mongoUri);
+      console.log('MongoDB connected successfully.');
+    } catch (err) {
+      console.error('Mongoose connection failure:', err.message);
+    }
   }
 }
 
