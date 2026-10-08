@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://7de67a85e722bb.lhr.life/api/:match*"
+      "destination": "https://391cd442229b0c.lhr.life/api/:match*"
     },
     {
       "source": "/health",
-      "destination": "https://7de67a85e722bb.lhr.life/health"
+      "destination": "https://391cd442229b0c.lhr.life/health"
     },
     {
       "source": "/(.*)",
